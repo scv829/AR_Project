@@ -21,9 +21,6 @@ public class GateController : MonoBehaviour
         portals[currentPortal].SetActive(false);
         currentPortal = (currentPortal + 1) % (portals.Count);
         portals[currentPortal].SetActive(toggle.isOn);
-        
     }
-
-
 
 }

@@ -2,25 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnGate : MonoBehaviour
 {
     [SerializeField] GameObject gate;
     
     [SerializeField] bool isSpawned;
+    [SerializeField] GameObject spawnButton;
 
     private void Update()
     {
         if(Input.touchCount > 0 && !isSpawned)
         {
-            // Ä«¸Ş¶ó·Î ºÎÅÍ 20 ¶³¾îÁø °÷¿¡ »ı¼º
-            gate.transform.position = Camera.main.transform.position + (Vector3.forward * 10);
-            // °ÔÀÌÆ®´Â Ä«¸Ş¶ó¸¦ ¹Ù¶óº¸°Ô ¼³Á¤
+            // ì¹´ë©”ë¼ë¡œ ë¶€í„° 10 ë–¨ì–´ì§„ ê³³ì— ìƒì„±
+            gate.transform.position = Camera.main.transform.position + (Camera.main.transform.forward * 10);
+            // ê²Œì´íŠ¸ëŠ” ì¹´ë©”ë¼ë¥¼ ë°”ë¼ë³´ê²Œ ì„¤ì •
             gate.transform.LookAt(Camera.main.transform.position);
-            // °ÔÀÌÆ® È°¼ºÈ­
+            // ê²Œì´íŠ¸ í™œì„±í™”
             gate.SetActive(true);
-            // °ÔÀÌÆ®¸¦ ¸¸µé¾ú´Ù°í ¼³Á¤
+            // ê²Œì´íŠ¸ë¥¼ ë§Œë“¤ì—ˆë‹¤ê³  ì„¤ì •
             isSpawned = true;
+            spawnButton.SetActive(true);
         }
     }
 

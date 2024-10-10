@@ -1268,7 +1268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6802641eecc2d744931b20bd6f6b5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeArray: 05000000
+  sizeArray: 01000000
   monsterPrefab:
   - {fileID: 2866245271950194846, guid: ddbc28bb42bee774db55a2d36381b09e, type: 3}
   monsters: 

@@ -28,6 +28,7 @@ public class MonsterPool : MonoBehaviour
                 Monster monster = Instantiate(monsterPrefab[i]);
                 monster.gameObject.SetActive(false);
                 monster.transform.parent = transform;
+                monster.Type = i;
                 monsterList[i].Add(monster);
             }
         }
@@ -51,4 +52,11 @@ public class MonsterPool : MonoBehaviour
         }
     }
 
+    public void ReturnPool(int type, Monster monster)
+    {
+        monsters[type]++;
+        monster.gameObject.SetActive(false);
+        monster.transform.parent = transform;
+        monsterList[type].Add(monster);
+    }
 }

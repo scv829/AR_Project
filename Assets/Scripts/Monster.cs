@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
+    [Header("Target")]
     [SerializeField] GameObject player;
+    [Header("Property")]
     [SerializeField] float moveSpeed;
     [SerializeField] bool isAttack;
+    [SerializeField] int hp;
+    [SerializeField] int maxHp;
 
     [Header("Pool")]
+    [SerializeField] int type;
     [SerializeField] MonsterPool returnPool;
 
     public MonsterPool ReturnPool { set { returnPool = value; } }
+    public int Type{ set { type = value; } }
 
     private void Start()
     {
@@ -40,13 +46,25 @@ public class Monster : MonoBehaviour
         }
     }
 
+    // 누가 나갔는데
     private void OnTriggerEixt(Collider other)
     {
-        // 그게 플레이어면 공격 범위에 들어왔다
+        // 그게 플레이어면 공격 범위에서 나갔다
         if (other.CompareTag("Player"))
         {
-            // 그래서 공격
+            // 그래서 추격
             isAttack = false;
         }
     }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            returnPool.ReturnPool(type, this);
+            hp = maxHp;
+        }
+    }
+
 }

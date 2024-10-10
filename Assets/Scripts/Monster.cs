@@ -8,7 +8,6 @@ public class Monster : MonoBehaviour
     [SerializeField] GameObject player;
     [Header("Property")]
     [SerializeField] float moveSpeed;
-    [SerializeField] bool isAttack;
     [SerializeField] int hp;
     [SerializeField] int maxHp;
 
@@ -19,6 +18,17 @@ public class Monster : MonoBehaviour
     public MonsterPool ReturnPool { set { returnPool = value; } }
     public int Type{ set { type = value; } }
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+
+    private Coroutine attackCoroutine;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+        attackCoroutine = null;
+    }
+
     private void Start()
     {
         // 목표 대상을 플레이어로 설정
@@ -28,7 +38,7 @@ public class Monster : MonoBehaviour
     private void Update()
     {
         // 우선 공격중이면 멈추기
-        if (isAttack) { return; }
+        if (attackCoroutine != null) { return; }
 
         // 플레이어를 향해 추적하는 로직
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
@@ -39,10 +49,10 @@ public class Monster : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 그게 플레이어면 공격 범위에 들어왔다
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && attackCoroutine == null)
         {
             // 그래서 공격
-            isAttack = true;
+            attackCoroutine = StartCoroutine(AttackCoroutine());
         }
     }
 
@@ -50,10 +60,11 @@ public class Monster : MonoBehaviour
     private void OnTriggerEixt(Collider other)
     {
         // 그게 플레이어면 공격 범위에서 나갔다
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && attackCoroutine != null)
         {
             // 그래서 추격
-            isAttack = false;
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
         }
     }
 
@@ -64,6 +75,25 @@ public class Monster : MonoBehaviour
         {
             returnPool.ReturnPool(type, this);
             hp = maxHp;
+        }
+    }
+
+    private IEnumerator AttackCoroutine()
+    {
+        float currentAttackCoolTime = 1f;
+        while (true)
+        {
+            if(currentAttackCoolTime >= 1)
+            {
+                // 쿨타임 초기화
+                currentAttackCoolTime = 0f;
+                // 공격 개시
+                animator.SetTrigger("Attack");
+            }
+
+            currentAttackCoolTime += Time.deltaTime;
+
+            yield return null;
         }
     }
 

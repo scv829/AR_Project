@@ -2057,7 +2057,7 @@ GameObject:
   - component: {fileID: 5747726949320329247}
   - component: {fileID: 4772824746402473165}
   - component: {fileID: 1035694699722647611}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2120,9 +2120,11 @@ MonoBehaviour:
   moveSpeed: 2
   hp: 0
   maxHp: 0
+  isAttack: 0
   type: 0
   returnPool: {fileID: 0}
   animator: {fileID: 623251321092510716}
+  curState: 0
 --- !u!136 &5747726949320329247
 CapsuleCollider:
   m_ObjectHideFlags: 0

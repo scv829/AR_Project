@@ -7,8 +7,8 @@ public class Monster : MonoBehaviour
     [SerializeField] GameObject player;
     [Header("Property")]
     [SerializeField] float moveSpeed;
-    [SerializeField] int hp;
-    [SerializeField] int maxHp;
+    [SerializeField] float hp;
+    [SerializeField] float maxHp;
     [SerializeField] bool isAttack;
 
     [Header("Pool")]
@@ -48,14 +48,8 @@ public class Monster : MonoBehaviour
         hp = maxHp;
         curState = State.Trace;
         states[(int)curState].Enter();
-        StartCoroutine(RetrunTest());
     }
 
-    private IEnumerator RetrunTest()
-    {
-        yield return new WaitForSeconds(2f);
-        ChangeState(State.Die);
-    }
 
     private void Update()
     {
@@ -85,7 +79,7 @@ public class Monster : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         hp -= damage;
         if (hp <= 0)
@@ -168,6 +162,8 @@ public class Monster : MonoBehaviour
                     currentAttackCoolTime = 0f;
                     // 공격 개시
                     monster.animator.SetTrigger("Attack");
+
+                    monster.player.GetComponent<PlayerController>().TakeDamage(1f);
                 }
 
                 currentAttackCoolTime += Time.deltaTime;

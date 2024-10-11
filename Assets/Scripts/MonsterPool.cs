@@ -12,7 +12,7 @@ public class MonsterPool : MonoBehaviour
 
     [SerializeField] int totalMonsterCount;
 
-    public int WaveSize(int level) { return sizeArray[level]; }
+    public int WaveSize(int level) { return (sizeArray.Length <= level) ? -1 : sizeArray[level]; }
 
     private Coroutine spawnCoroutine;
 

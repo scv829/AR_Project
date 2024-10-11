@@ -1158,6 +1158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1405742554}
   - component: {fileID: 1405742555}
+  - component: {fileID: 1405742556}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1193,6 +1194,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1405742556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405742553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26642630deb33f742ad35053e82adf59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 3
+  attackSpeed: 1
+  attackDamage: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1444381303
 GameObject:
   m_ObjectHideFlags: 0

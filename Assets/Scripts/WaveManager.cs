@@ -1,6 +1,7 @@
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
@@ -64,10 +65,28 @@ public class WaveManager : MonoBehaviour
     {
         currentWave++;
         // UI 감추기
-        waveLevelText.gameObject.SetActive(false);
         remainingMonsterCountText.gameObject.SetActive(false);
-        // 시작 버튼 활성화
-        startButton.gameObject.SetActive(true);
+
+        // 다음 웨이브가 있으면 시작 버튼 활성화
+        if (!monsterPool.WaveSize(currentWave).Equals(-1))
+        {
+            waveLevelText.gameObject.SetActive(false);
+            startButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            sb.Clear();
+            sb.Append($"All Clear");
+            waveLevelText.SetText(sb);
+            waveLevelText.gameObject.SetActive(true);
+        }
+    }
+
+    public void WaveOver()
+    {
+        // 웨이브를 실패해서 다시 시작
+        Debug.Log("게임 다시 시작!");
+        SceneManager.LoadScene(0);
     }
 
 }

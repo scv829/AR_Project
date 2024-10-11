@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class SpawnGate : MonoBehaviour
 {
     [SerializeField] GameObject gate;
-    
     [SerializeField] bool isSpawned;
-    [SerializeField] GameObject spawnButton;
 
     private void Update()
     {
@@ -23,7 +21,6 @@ public class SpawnGate : MonoBehaviour
             gate.SetActive(true);
             // 게이트를 만들었다고 설정
             isSpawned = true;
-            spawnButton.SetActive(true);
         }
     }
 

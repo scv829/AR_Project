@@ -48,6 +48,13 @@ public class Monster : MonoBehaviour
         hp = maxHp;
         curState = State.Trace;
         states[(int)curState].Enter();
+        StartCoroutine(RetrunTest());
+    }
+
+    private IEnumerator RetrunTest()
+    {
+        yield return new WaitForSeconds(2f);
+        ChangeState(State.Die);
     }
 
     private void Update()

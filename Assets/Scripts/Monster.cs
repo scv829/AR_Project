@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : MonoBehaviour
@@ -10,6 +9,7 @@ public class Monster : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] int hp;
     [SerializeField] int maxHp;
+    [SerializeField] bool isAttack;
 
     [Header("Pool")]
     [SerializeField] int type;
@@ -21,12 +21,20 @@ public class Monster : MonoBehaviour
     [Header("Animation")]
     [SerializeField] Animator animator;
 
-    private Coroutine attackCoroutine;
+
+    [Header("State")]
+    [SerializeField] State curState;
+    public enum State { Trace, Attack, Die, Size }
+    BaseState[] states = new BaseState[(int)State.Size];
+
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        attackCoroutine = null;
+
+        states[(int)State.Trace] = new TraceState(this);
+        states[(int)State.Attack] = new AttackState(this);
+        states[(int)State.Die] = new DieState(this);
     }
 
     private void Start()
@@ -35,24 +43,26 @@ public class Monster : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    private void OnEnable()
+    {
+        hp = maxHp;
+        curState = State.Trace;
+        states[(int)curState].Enter();
+    }
+
     private void Update()
     {
-        // 우선 공격중이면 멈추기
-        if (attackCoroutine != null) { return; }
-
-        // 플레이어를 향해 추적하는 로직
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
-        transform.LookAt(player.transform.position);
+        states[(int)curState].Update();
     }
 
     // 충돌이 발생했는데
     private void OnTriggerEnter(Collider other)
     {
         // 그게 플레이어면 공격 범위에 들어왔다
-        if(other.CompareTag("Player") && attackCoroutine == null)
+        if(other.CompareTag("Player"))
         {
             // 그래서 공격
-            attackCoroutine = StartCoroutine(AttackCoroutine());
+            isAttack = true;
         }
     }
 
@@ -60,40 +70,118 @@ public class Monster : MonoBehaviour
     private void OnTriggerEixt(Collider other)
     {
         // 그게 플레이어면 공격 범위에서 나갔다
-        if (other.CompareTag("Player") && attackCoroutine != null)
+        if (other.CompareTag("Player") )
         {
             // 그래서 추격
-            StopCoroutine(attackCoroutine);
-            attackCoroutine = null;
+            isAttack = false;
         }
     }
+
 
     public void TakeDamage(int damage)
     {
         hp -= damage;
         if (hp <= 0)
         {
-            returnPool.ReturnPool(type, this);
-            hp = maxHp;
+            ChangeState(State.Die);
         }
     }
 
-    private IEnumerator AttackCoroutine()
+    public void ChangeState(State state)
     {
-        float currentAttackCoolTime = 1f;
-        while (true)
+        states[(int)curState].Exit();
+        curState = state;
+        states[(int)curState].Enter();
+    }
+
+    private class TraceState : BaseState
+    {
+        [SerializeField] Monster monster;
+
+        public TraceState(Monster monster) { this.monster = monster; }
+
+        public override void Update()
         {
-            if(currentAttackCoolTime >= 1)
+            // 플레이어를 향해 추적하는 로직
+            monster.transform.position = Vector3.MoveTowards(monster.transform.position, monster.player.transform.position, monster.moveSpeed * Time.deltaTime);
+            monster.transform.LookAt(monster.player.transform.position);
+
+            // 공격 범위에 들어 왔으면
+            if(monster.isAttack.Equals(true))
             {
-                // 쿨타임 초기화
-                currentAttackCoolTime = 0f;
-                // 공격 개시
-                animator.SetTrigger("Attack");
+                // 공격
+                monster.ChangeState(State.Attack);
             }
+        }
 
-            currentAttackCoolTime += Time.deltaTime;
+    }
 
-            yield return null;
+    private class AttackState : BaseState
+    {
+        [SerializeField] Monster monster;
+        [SerializeField] float currentAttackCoolTime;
+
+        private Coroutine attackCoroutine;
+
+        public AttackState(Monster monster)
+        {
+            this.monster = monster;
+        }
+
+        public override void Enter()
+        {
+            Debug.Log("enemy Attack Start");
+            attackCoroutine = monster.StartCoroutine(AttackCoroutine());
+
+        }
+
+        public override void Update()
+        {
+            if (monster.isAttack.Equals(false))
+            {
+                monster.ChangeState(State.Trace);
+            }
+        }
+
+        public override void Exit()
+        {
+            Debug.Log("enemy Attack Stop!");
+            monster.StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+
+        private IEnumerator AttackCoroutine()
+        {
+            float currentAttackCoolTime = 1f;
+            while (true)
+            {
+                if (currentAttackCoolTime >= 1)
+                {
+                    // 쿨타임 초기화
+                    currentAttackCoolTime = 0f;
+                    // 공격 개시
+                    monster.animator.SetTrigger("Attack");
+                }
+
+                currentAttackCoolTime += Time.deltaTime;
+
+                yield return null;
+            }
+        }
+
+    }
+
+    private class DieState : BaseState
+    {
+        private Monster monster;
+
+        public DieState(Monster monster) { this.monster = monster; }
+
+        public override void Enter()
+        {
+            Debug.Log($"{monster.name} is Die!");
+            // 풀에 회수
+            monster.returnPool.ReturnPool(monster.type, monster);
         }
     }
 

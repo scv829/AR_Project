@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Toggle spawnToggle;
     [SerializeField] Button nextButton;
     [SerializeField] Button OpenStore;
+    [SerializeField] Button healButton;
+    [SerializeField] Button buffButton;
 
     public int Gold { get { return gold; } set { gold = value; UpdateText(); } }
     public void GameOver() => isOver = true;
@@ -65,6 +67,10 @@ public class GameManager : MonoBehaviour
             nextButton.gameObject.SetActive(true);
             // 상점 포탈 자유 이동 활성화
             OpenStore.gameObject.SetActive(true);
+            // 힐 버프 포탈 자유 이동 활성화
+            healButton.gameObject.SetActive(true);
+            // 공격력 버프 포탈 자유 이동 활성화
+            buffButton.gameObject.SetActive(true);
             // 랜덤 포탈 버튼 비활성화
             openPortalButton.gameObject.SetActive(false);
         }

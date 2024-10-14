@@ -3506,6 +3506,8 @@ MonoBehaviour:
   spawnToggle: {fileID: 513269645}
   nextButton: {fileID: 1834517628}
   OpenStore: {fileID: 44615472}
+  healButton: {fileID: 533513401}
+  buffButton: {fileID: 1839622261}
 --- !u!4 &1237715189
 Transform:
   m_ObjectHideFlags: 0

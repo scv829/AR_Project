@@ -10,7 +10,7 @@ public class PortalController : MonoBehaviour
 
     public void OpenPortal()
     {
-        float num = Random.Range(0.8f, 1f);
+        float num = Random.Range(0f, 1f);
 
         // Wave 포탈
         if (num < 0.6f)

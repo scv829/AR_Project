@@ -10,6 +10,7 @@ public class Monster : MonoBehaviour
     [SerializeField] float hp;
     [SerializeField] float maxHp;
     [SerializeField] bool isAttack;
+    [SerializeField] int dropGold;
 
     [Header("Pool")]
     [SerializeField] int type;
@@ -185,6 +186,9 @@ public class Monster : MonoBehaviour
             Debug.Log($"{monster.name} is Die!");
             // 풀에 회수
             monster.returnPool.ReturnPool(monster.type, monster);
+
+            // 골드 드랍
+            GameManager.Instance.Gold += monster.dropGold * monster.player.GetComponent<PlayerController>().IncreaseGoldMount;
         }
     }
 

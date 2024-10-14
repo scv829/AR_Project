@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         sb = new StringBuilder();
     }
 
+    private void Start()
+    {
+        UpdateText();
+    }
+
     private void UpdateText()
     {
         sb.Clear();

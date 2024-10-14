@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class Store : MonoBehaviour
 {
     [SerializeField] GameObject canvas;
+    [SerializeField] PlayerController player;
 
     [Header("UpgradeButton")]
     [SerializeField] List<Button> buttonList;
@@ -21,43 +22,60 @@ public class Store : MonoBehaviour
     [SerializeField] int[] levels;
     [SerializeField] int powerLevel;           // 공격력 현재 레벨
     [SerializeField] int healthLevel;          // 체력 현재 레벨
-    [SerializeField] int attackSpeedLevel;     // 공격속도 현재 레벨
     [SerializeField] int gainGoldAmountLevel;  // 골드 획득량 현재 레벨
 
     [Header("UpgradeCosts")]
     [SerializeField] int[,] costArray;
-    public enum Type { Power, Health, AtttackSpeed, GainGold, Size }
+    public enum Type { Power, Health, GainGold, Size }
+
+    [Header("UpgradeStat")]
+    [SerializeField] int[,] statArray;
 
     private StringBuilder sb;
+
+    private Coroutine openCoroutine;
+    private Coroutine closeCoroutine;
 
     private void Awake()
     {
         costArray = new int[4, (int)Type.Size]
         {
-            { 100, 100, 100, 100 },    // 첫 번째 업그레이드 비용
-            { 200, 200, 200, 200 },    // 두 번째 업그레이드 비용
-            { 300, 300, 300, 300 },    // 세 번째 업그레이드 비용
-            { 500, 500, 500, 500 },    // 마지막 업그레이드 비용
+            { 100, 100, 100 },    // 첫 번째 업그레이드 비용
+            { 200, 200, 200 },    // 두 번째 업그레이드 비용
+            { 300, 300, 300 },    // 세 번째 업그레이드 비용
+            { 500, 500, 500 },    // 마지막 업그레이드 비용
+        };
+
+        statArray = new int[4, (int)Type.Size]
+{         //  ATK,  HP, GAIN
+            {   2,   2,   2 },    // 첫 번째 업그레이드 스텟
+            {   4,   2,   3 },    // 두 번째 업그레이드 스텟
+            {   6,   3,   4 },    // 세 번째 업그레이드 스텟
+            {   8,   5,   5 },    // 마지막 업그레이드 스텟
         };
 
         levels = new int[(int)Type.Size];
         sb = new StringBuilder();
+
+        openCoroutine = null;
+        closeCoroutine = null;
     }
 
     private void Start()
     {
-
         for (int i = 0; i < buttonList.Count; i++)
         {
             textList[i] = buttonList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         }
+
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
 
     public void OpenStore()
     {
         Debug.Log("상점 버튼 오픈!");
-        canvas.gameObject.GetComponent<Animator>().SetTrigger("OpenTrigger");
-        StartCoroutine(OpenStoreCorotine());
+        if (closeCoroutine != null) { StopCoroutine(closeCoroutine); closeCoroutine = null; }
+        openCoroutine = StartCoroutine(OpenStoreCorotine());
 
         // 버튼들이 업글 가능한지 확인 -> 골드에 변화량이 생길 때 UI 변경
         CheckUpgrade();
@@ -65,6 +83,7 @@ public class Store : MonoBehaviour
 
     IEnumerator OpenStoreCorotine()
     {
+        canvas.gameObject.GetComponent<Animator>().SetTrigger("OpenTrigger");
         while (true)
         {
             if (canvas.gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) break;
@@ -73,10 +92,20 @@ public class Store : MonoBehaviour
 
         foreach(Button button in buttonList) button.gameObject.SetActive(true);
         GameManager.Instance.ChangeStoreCanvas();
+
+        openCoroutine = null;
+    }
+
+    public void CloseStore()
+    {
+        Debug.Log("상점 버튼 클로즈!");
+        if (openCoroutine != null) { StopCoroutine(openCoroutine); openCoroutine = null; }
+        closeCoroutine = StartCoroutine(CloseStoreCorotine());
     }
 
     IEnumerator CloseStoreCorotine()
     {
+        canvas.gameObject.GetComponent<Animator>().SetTrigger("CloseTrigger");
         while (true)
         {
             if (canvas.gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f) break;
@@ -85,13 +114,8 @@ public class Store : MonoBehaviour
 
         foreach(Button button in buttonList) button.gameObject.SetActive(false);
         GameManager.Instance.ChangeMainCanvas();
-    }
 
-    public void CloseStore()
-    {
-        Debug.Log("상점 버튼 클로즈!");
-        StartCoroutine(CloseStoreCorotine());
-        canvas.gameObject.GetComponent<Animator>().SetTrigger("CloseTrigger");
+        closeCoroutine = null;
     }
 
     public void Upgrade(int index)
@@ -103,7 +127,10 @@ public class Store : MonoBehaviour
         Debug.Log($"{type} 업그레이드!");
 
         GameManager.Instance.Gold -= costArray[levels[(int)type], (int)type];
+        player.UpgradeStat(type, statArray[levels[(int)type], (int)type]);
+
         levels[(int)type] += 1;
+
 
         // 업그레이드를 했는데 최고 레벨일 경우 Text 설정
         if (levels[(int)type] >= costArray.GetLength(0))
@@ -117,58 +144,6 @@ public class Store : MonoBehaviour
             // 더이상 업그레이드 못하게 비활성화
             buttonList[(int)type].interactable = true;
         }
-
-        // 업그레이드 이후 다시 버튼들을 확인
-        CheckUpgrade();
-    }
-
-    public void UpgradePower(Type type)
-    {
-        // 공격력 업그레이드 버튼 눌렀을 때 상호작용
-        Debug.Log("공격력 업그레이드!");
-
-        GameManager.Instance.Gold -= costArray[levels[(int)Type.Power], (int)Type.Power];
-        levels[(int)Type.Power] += 1;
-
-        // 업그레이드를 했는데 최고 레벨일 경우 Text 설정
-        if(levels[(int)Type.Power] >= costArray.GetLength(0))
-        {
-            sb.Clear();
-            sb.AppendLine($"{Type.Power}");
-            sb.Append("Max");
-
-            textList[(int)Type.Power].SetText(sb);
-
-            // 더이상 업그레이드 못하게 비활성화
-            buttonList[(int)Type.Power].interactable = true;
-        }
-
-        // 업그레이드 이후 다시 버튼들을 확인
-        CheckUpgrade();
-    }
-
-    public void UpdateHealth()
-    {
-        // 체력 업그레이드 버튼 눌렀을 때 상호작용
-        Debug.Log("체력 업그레이드!");
-
-        // 업그레이드 이후 다시 버튼들을 확인
-        CheckUpgrade();
-    }
-
-    public void UpdateAttackSpeed()
-    {
-        // 공격 속도 업그레이드 버튼 눌렀을 때 상호작용
-        Debug.Log("공격 속도 업그레이드!");
-
-        // 업그레이드 이후 다시 버튼들을 확인
-        CheckUpgrade();
-    }
-
-    public void UpdateGainGoldAmount()
-    {
-        // 골드 획득량 업그레이드 버튼 눌렀을 때 상호작용
-        Debug.Log("골드 획득량 업그레이드!");
 
         // 업그레이드 이후 다시 버튼들을 확인
         CheckUpgrade();

@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -129,4 +130,18 @@ public class PlayerController : MonoBehaviour
         hpText.SetText(sb);
     }
 
+    public void HealBuff()
+    {
+        hp += (maxHp * 0.3f);
+        if (hp >= maxHp) hp = maxHp;
+
+        UpdateText();
+    }
+
+    public void DamageBuff()
+    {
+        attackDamage += 1;
+
+        UpdateText();
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("상점 캠버스");
         spawnToggle.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
+        OpenStore.gameObject.SetActive(true);
     }
 
     public void ChangeMainCanvas()
@@ -91,6 +93,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(" 캠버스");
         spawnToggle.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
+        OpenStore.gameObject.SetActive(false);
     }
 
     public void EnterPortal()
@@ -105,4 +108,5 @@ public class GameManager : MonoBehaviour
         portalController.TurnOffPortal();
     }
 
+    
 }

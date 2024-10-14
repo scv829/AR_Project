@@ -3883,8 +3883,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6219434647633676436}
   - component: {fileID: 6272346331460313242}
+  - component: {fileID: 6876667037651236781}
   m_Layer: 0
-  m_Name: Healer
+  m_Name: Magician
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3938,10 +3939,10 @@ Animator:
   m_GameObject: {fileID: 6222838972135854888}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9d545e43681431348908eab98e78aa45, type: 3}
-  m_Controller: {fileID: 9100000, guid: d5ed51efd55d50448b90542c2b7239a5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 688a94626030f07469d947d499cc9d82, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -3949,6 +3950,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6876667037651236781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6222838972135854888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0833860301eebc408fddc214f137191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 0}
+  moveFwdPoint: {fileID: 0}
+  moveSpeed: 5
+  animator: {fileID: 6272346331460313242}
+  buffPrefabs:
+  - {fileID: 5699517509544310875, guid: 31024c0875d000a4e825e3d404c53659, type: 3}
+  - {fileID: 7234275393154269067, guid: 61e993cec5b23be47af330dd7e51da8e, type: 3}
+  playerController: {fileID: 0}
 --- !u!1 &6222849942121648652
 GameObject:
   m_ObjectHideFlags: 0

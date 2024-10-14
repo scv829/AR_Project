@@ -6,10 +6,11 @@ public class PortalController : MonoBehaviour
 {
     [SerializeField] List<GameObject> portals;
     [SerializeField] TraderController traderController;
+    [SerializeField] BuffController buffController;
 
     public void OpenPortal()
     {
-        float num = Random.Range(0f, 1f);
+        float num = Random.Range(0.8f, 1f);
 
         // Wave 포탈
         if (num < 0.6f)
@@ -32,6 +33,7 @@ public class PortalController : MonoBehaviour
         {
             Debug.Log("체력회복 포탈 On!");
             portals[2].gameObject.SetActive(true);
+            buffController.BuffStart(0);
             GameManager.Instance.EnterPortal();
         }
         // 히든 - 공격력 버프
@@ -39,6 +41,7 @@ public class PortalController : MonoBehaviour
         {
             Debug.Log("공격력 버프 포탈 On!");
             portals[3].gameObject.SetActive(true);
+            buffController.BuffStart(1);
             GameManager.Instance.EnterPortal();
         }
     }

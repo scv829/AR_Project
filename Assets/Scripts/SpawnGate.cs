@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ public class SpawnGate : MonoBehaviour
     [SerializeField] GameObject gate;
     [SerializeField] bool isSpawned;
     [SerializeField] Button openPortalButton;
+    [SerializeField] Slider hpBar;
+    [SerializeField] TextMeshProUGUI goldText;
+    [SerializeField] TextMeshProUGUI StatText;
 
     private void Update()
     {
@@ -24,6 +28,10 @@ public class SpawnGate : MonoBehaviour
             isSpawned = true;
             // 포탈 열기 버튼 활성화
             openPortalButton.gameObject.SetActive(true);
+            // 게임에 필요한 UI 활성화
+            hpBar.gameObject.SetActive(true);
+            goldText.gameObject.SetActive(true);
+            StatText.gameObject.SetActive(true);
         }
     }
 

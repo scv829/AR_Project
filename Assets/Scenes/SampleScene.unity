@@ -3508,6 +3508,7 @@ MonoBehaviour:
   OpenStore: {fileID: 44615472}
   healButton: {fileID: 533513401}
   buffButton: {fileID: 1839622261}
+  exitStoreButton: {fileID: 998241056}
 --- !u!4 &1237715189
 Transform:
   m_ObjectHideFlags: 0
@@ -3961,7 +3962,7 @@ MonoBehaviour:
   hp: 3
   maxHp: 3
   attackDamage: 1
-  increaseGoldAmount: 0
+  increaseGoldAmount: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 8

@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button OpenStore;
     [SerializeField] Button healButton;
     [SerializeField] Button buffButton;
+    [SerializeField] Button exitStoreButton;
 
     public int Gold { get { return gold; } set { gold = value; UpdateText(); } }
     public void GameOver() => isOver = true;
@@ -91,7 +92,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("상점 캠버스");
         spawnToggle.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
-        OpenStore.gameObject.SetActive(true);
+        exitStoreButton.gameObject.SetActive(true);
     }
 
     public void ChangeMainCanvas()
@@ -99,7 +100,7 @@ public class GameManager : MonoBehaviour
         Debug.Log(" 캠버스");
         spawnToggle.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
-        OpenStore.gameObject.SetActive(false);
+        exitStoreButton.gameObject.SetActive(false);
     }
 
     public void EnterPortal()

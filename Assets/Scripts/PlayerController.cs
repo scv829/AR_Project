@@ -91,6 +91,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log("게임오버!");
             GameManager.Instance.GameOver();
         }
+
+        UpdateText();
     }
 
     public void UpgradeStat(Store.Type type, int increase)

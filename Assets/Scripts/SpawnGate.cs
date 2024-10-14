@@ -8,6 +8,7 @@ public class SpawnGate : MonoBehaviour
 {
     [SerializeField] GameObject gate;
     [SerializeField] bool isSpawned;
+    [SerializeField] Button openPortalButton;
 
     private void Update()
     {
@@ -21,6 +22,8 @@ public class SpawnGate : MonoBehaviour
             gate.SetActive(true);
             // 게이트를 만들었다고 설정
             isSpawned = true;
+            // 포탈 열기 버튼 활성화
+            openPortalButton.gameObject.SetActive(true);
         }
     }
 

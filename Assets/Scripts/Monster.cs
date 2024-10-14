@@ -11,12 +11,16 @@ public class Monster : MonoBehaviour
     [SerializeField] float maxHp;
     [SerializeField] bool isAttack;
     [SerializeField] int dropGold;
+    [SerializeField] string name;
 
     [Header("Pool")]
     [SerializeField] int type;
     [SerializeField] MonsterPool returnPool;
 
     public MonsterPool ReturnPool { set { returnPool = value; } }
+    public string Name { get { return name; } }
+    public float Hp { get { return hp; } }
+    public float MaxHp { get { return maxHp; } }
     public int Type{ set { type = value; } }
 
     [Header("Animation")]

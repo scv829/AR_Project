@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -20,6 +18,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Slider hpBar;              // 체력바
     [SerializeField] TextMeshProUGUI hpText;    // 체력바 텍스트
     [SerializeField] TextMeshProUGUI statText;  // 스텟 텍스트
+
+    [Header("MonsterUI")]
+    [SerializeField] Slider monsterHpBar;              // 몬스터 체력바
+    [SerializeField] TextMeshProUGUI monsterName;    // 몬스터 이름
+
 
     public int IncreaseGoldMount { get { return increaseGoldAmount; } }
 
@@ -44,15 +47,34 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.touchCount > 0)
+
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, layerMask))
         {
-            Ray ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, layerMask)) 
+            Monster monster = hit.collider.gameObject.GetComponent<Monster>();
+
+            sb.Clear();
+
+            sb.Append($"{monster.Name}");
+            monsterHpBar.value = monster.Hp;
+            monsterHpBar.maxValue = monster.MaxHp;
+
+            monsterHpBar.gameObject.SetActive(true);
+            monsterName.gameObject.SetActive(true);
+
+            if (Input.touchCount > 0)
             {
                 Debug.Log("플레이어 몬스터 공격 중!");
-                hit.collider.gameObject.GetComponent<Monster>().TakeDamage(attackDamage); 
+                monster.TakeDamage(attackDamage);
             }
         }
+        else
+        {
+            monsterHpBar.gameObject.SetActive(false);
+            monsterName.gameObject.SetActive(false);
+        }
+        
+
     }
 
     public void TakeDamage(float damage)
@@ -66,14 +88,14 @@ public class PlayerController : MonoBehaviour
         {
             hpBar.value = 0;
             Debug.Log("게임오버!");
-            WaveManager.Instance.WaveOver();
+            GameManager.Instance.GameOver();
         }
     }
 
     public void UpgradeStat(Store.Type type, int increase)
     {
         switch (type)
-        { 
+        {
             case Store.Type.Power:
                 attackDamage = increase;
                 break;

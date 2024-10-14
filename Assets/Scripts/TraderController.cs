@@ -33,9 +33,11 @@ public class TraderController : MonoBehaviour
     {
         OpenEvent.AddListener(store.OpenStore);
         OpenEvent.AddListener(trader.MoveForward);
+        OpenEvent.AddListener(GameManager.Instance.EnterStore);
 
         CloseEvent.AddListener(store.CloseStore);
         CloseEvent.AddListener(trader.MoveReturn);
+        CloseEvent.AddListener(GameManager.Instance.ExitStore);
     }
 
     public void OpenStore()
@@ -46,6 +48,7 @@ public class TraderController : MonoBehaviour
     public void CloseStore()
     {
         CloseEvent?.Invoke();
+        GameManager.Instance.ExitPortal();
     }
 
 }

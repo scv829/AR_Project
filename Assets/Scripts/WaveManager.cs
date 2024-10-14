@@ -43,9 +43,6 @@ public class WaveManager : MonoBehaviour
         monsterPool.SpawnMonster();
         // UI 내용 업데이트
         UpdateWaveText();
-
-        // 시작 버튼 비활성화
-        startButton.gameObject.SetActive(false);
     }
 
     public void UpdateWaveText()
@@ -67,11 +64,11 @@ public class WaveManager : MonoBehaviour
         // UI 감추기
         remainingMonsterCountText.gameObject.SetActive(false);
 
-        // 다음 웨이브가 있으면 시작 버튼 활성화
+        
         if (!monsterPool.WaveSize(currentWave).Equals(-1))
         {
             waveLevelText.gameObject.SetActive(false);
-            startButton.gameObject.SetActive(true);
+            GameManager.Instance.ExitPortal();
         }
         else
         {
@@ -79,14 +76,8 @@ public class WaveManager : MonoBehaviour
             sb.Append($"All Clear");
             waveLevelText.SetText(sb);
             waveLevelText.gameObject.SetActive(true);
+            GameManager.Instance.GameClear();
         }
-    }
-
-    public void WaveOver()
-    {
-        // 웨이브를 실패해서 다시 시작
-        Debug.Log("게임 다시 시작!");
-        SceneManager.LoadScene(0);
     }
 
 }

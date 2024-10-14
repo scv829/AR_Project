@@ -1099,10 +1099,10 @@ Animator:
   m_GameObject: {fileID: 2828787330794819611}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9d545e43681431348908eab98e78aa45, type: 3}
-  m_Controller: {fileID: 9100000, guid: d5ed51efd55d50448b90542c2b7239a5, type: 2}
+  m_Controller: {fileID: 9100000, guid: c9dab581a2524b14cbca08b3b7a8c61b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1124,8 +1124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 0}
   moveFwdPoint: {fileID: 0}
-  moveSpeed: 0
-  parent: {fileID: 0}
+  moveSpeed: 5
 --- !u!1 &2828790972681708931
 GameObject:
   m_ObjectHideFlags: 0

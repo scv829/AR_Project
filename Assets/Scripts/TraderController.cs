@@ -11,7 +11,7 @@ public class TraderController : MonoBehaviour
     [SerializeField] Trader trader;             // 상인 오브젝트
     [SerializeField] Trader TraderPrefab;       // 상인 프리팹
     [SerializeField] Transform spawnPoint;      // 상인 등장 지점     
-    [SerializeField] Transform moveFwdPoint;    // 등장할 때 목표로 갈 위치
+    [SerializeField] Transform movePoint;    // 등장할 때 목표로 갈 위치
 
     [Header("Event")]
     [SerializeField] UnityEvent OpenEvent;
@@ -23,8 +23,8 @@ public class TraderController : MonoBehaviour
     {
         trader = Instantiate(TraderPrefab);
         trader.gameObject.SetActive(false);
-        trader.Parent = transform;
         trader.SpawnPoint = spawnPoint;
+        trader.MovePoint = movePoint;
 
         sb = new StringBuilder();
     }

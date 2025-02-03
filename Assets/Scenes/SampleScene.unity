@@ -1939,7 +1939,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1252299187}
   m_HandleRect: {fileID: 0}
@@ -3497,7 +3497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 100
   goldText: {fileID: 1620103498}
-  gameoverUI: {fileID: 0}
+  gameoverUI: {fileID: 1432680218}
   isOver: 0
   isClear: 0
   isUseStore: 0
@@ -3959,7 +3959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26642630deb33f742ad35053e82adf59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 3
+  hp: 2
   maxHp: 3
   attackDamage: 1
   increaseGoldAmount: 1
@@ -4680,7 +4680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6802641eecc2d744931b20bd6f6b5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeArray: 01000000
+  sizeArray: 02000000
   monsterPrefab:
   - {fileID: 2866245271950194846, guid: ddbc28bb42bee774db55a2d36381b09e, type: 3}
   monsters: 

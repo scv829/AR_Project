@@ -43,27 +43,22 @@ public class MonsterPool : MonoBehaviour
     public void SpawnMonster()
     {
         // 몬스터 생성 함수에서 생성 코루틴을 호출
-        StartCoroutine(spawnStart());
-    }
-
-    IEnumerator spawnStart()
-    {
-        // 웨이브 시작하고 바로 나오는건 너무 빨라서 대기 시간 이후 등장
-        yield return new WaitForSeconds(3f);
-        // 대기 시간 지나고 진짜 스폰 시작
-        StartCoroutine(SpawnCoroutine());
+        spawnCoroutine = StartCoroutine(SpawnCoroutine());
     }
 
     private IEnumerator SpawnCoroutine()
     {
+        yield return new WaitForSeconds(3f);
+
         // 몬스터들의 종류 만큼 반복
-        for(int type = 0; type < monsterPrefab.Length; type++)
+        for (int type = 0; type < monsterPrefab.Length; type++)
         {
             // 풀에 해당 종류의 몬스터가 있으면
             if (monsters[type] > 0)
             {
+                int len = monsters[type];
                 // 있는 만큼 반복해서 생성
-                for (int index = 0; index < monsters[type]; index++)
+                for (int index = 0; index < len; index++)
                 {
                     int count = monsterList[type].Count;
                     Monster monster = monsterList[type][count - 1];
@@ -84,7 +79,6 @@ public class MonsterPool : MonoBehaviour
 
     public void ReturnPool(int type, Monster monster)
     {
-        monsters[type]++;
         monster.gameObject.SetActive(false);
         monster.transform.parent = transform;
         monsterList[type].Add(monster);
@@ -94,6 +88,12 @@ public class MonsterPool : MonoBehaviour
         if (WaveManager.Instance.CurrentMonsterCount <= 0)
         {
             WaveManager.Instance.WaveClear();
+
+            if(spawnCoroutine != null)
+            {
+                StopCoroutine(spawnCoroutine);
+                spawnCoroutine = null;
+            }
         }
     }
 }

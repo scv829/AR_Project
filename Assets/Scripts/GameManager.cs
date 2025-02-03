@@ -97,9 +97,12 @@ public class GameManager : MonoBehaviour
 
     public void ChangeMainCanvas()
     {
-        Debug.Log(" 캠버스");
-        spawnToggle.gameObject.SetActive(true);
-        nextButton.gameObject.SetActive(true);
+        Debug.Log("캠버스");
+        if(isClear)
+        {
+            spawnToggle.gameObject.SetActive(true);
+            nextButton.gameObject.SetActive(true);
+        }
         exitStoreButton.gameObject.SetActive(false);
     }
 

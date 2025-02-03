@@ -31,6 +31,9 @@ public class TraderController : MonoBehaviour
 
     private void Start()
     {
+        OpenEvent.RemoveAllListeners();
+        CloseEvent.RemoveAllListeners();
+
         OpenEvent.AddListener(store.OpenStore);
         OpenEvent.AddListener(trader.MoveForward);
         OpenEvent.AddListener(GameManager.Instance.EnterStore);
